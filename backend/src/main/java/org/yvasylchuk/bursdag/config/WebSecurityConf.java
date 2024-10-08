@@ -58,7 +58,7 @@ public class WebSecurityConf {
 
         corsConfig.applyPermitDefaultValues();
         corsConfig.setAllowCredentials(true);
-        corsConfig.setAllowedOrigins(List.of("http://localhost:4200", "https://bursdag.yuriivasylchuk.rg.ua"));
+        corsConfig.setAllowedOrigins(List.of("http://localhost:4200", "https://bursdag.yuriivasylchuk.org.ua"));
         corsConfig.setAllowedMethods(List.of("GET", "HEAD", "POST", "PUT", "DELETE", "OPTIONS"));
 
         UrlBasedCorsConfigurationSource source =
