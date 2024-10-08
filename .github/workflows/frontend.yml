@@ -36,6 +36,8 @@ jobs:
           mkdir -p ~/.ssh/ && touch ~/.ssh/known_hosts
           ssh-keyscan ${{ secrets.AWS_HOST }} >> ~/.ssh/known_hosts
           tar -czf bursdag.tar.gz -C ./dist/frontend/browser .
+          pwd
+          ls -l
           ssh -i key.pem ubuntu@${{ secrets.AWS_HOST }} sudo rm -rf /var/www/bursdag/*
           scp -i key.pem bursdag.tar.gz ubuntu@${{ secrets.AWS_HOST }}:/home/ubuntu/bursdag/bursdag.tar.gz
           ssh -i key.pem ubuntu@${{ secrets.AWS_HOST }} sudo tar -xzf ~/bursdag/bursdag.tar.gz -C /var/www/bursdag/
