@@ -1,0 +1,40 @@
+name: Deploy frontend
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+    paths:
+      - frontend
+
+jobs:
+  build:
+    name: Build and Deploy
+
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up node.js
+        uses: actions/setup-node@v3.3.0
+        with:
+          node-version: '18'
+          cache: 'npm'
+      - name: Download dependencies
+        working-directory: frontend
+        run: npm ci
+      - name: Build
+        working-directory: frontend
+        run: npm run build:production
+      - name: Deploy to AWS
+        working-directory: frontend
+        run: |
+          echo "${{ secrets.AWS_SSH_KEY }}" | tr -d '\r' > key.pem
+          chmod 400 key.pem
+          mkdir -p ~/.ssh/ && touch ~/.ssh/known_hosts
+          ssh-keyscan ${{ secrets.AWS_HOST }} >> ~/.ssh/known_hosts
+          tar -czf bursdag.tar.gz -C ./dist/frontend/browser .
+          ssh -i key.pem ubuntu@${{ secrets.AWS_HOST }} sudo rm -rf /var/www/bursdag/*
+          scp -i key.pem bursdag.tar.gz ubuntu@${{ secrets.AWS_HOST }}:/home/ubuntu/bursdag/bursdag.tar.gz
+          ssh -i key.pem ubuntu@${{ secrets.AWS_HOST }} sudo tar -xzf ~/bursdag/bursdag.tar.gz -C /var/www/bursdag/
