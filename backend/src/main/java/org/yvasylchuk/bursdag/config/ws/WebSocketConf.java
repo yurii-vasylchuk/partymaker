@@ -31,7 +31,7 @@ public class WebSocketConf implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws", "/wss")
-                .setAllowedOrigins("http://localhost:4200", "https://mvasylchuk-bursdag.loca.lt");
+                .setAllowedOrigins("http://localhost:4200", "https://bursdag.yuriivasylchuk.org.ua");
     }
 
     @Override
