@@ -42,6 +42,7 @@ public class WebSecurityConf {
                     .requestMatchers("/api/common/access-token").permitAll()
                     .requestMatchers("/bursdag-static/**").permitAll()
                     .requestMatchers("/ws", "/ws/**").permitAll()
+                    .requestMatchers("/wss", "/wss/**").permitAll()
                     .requestMatchers("/error").permitAll()
                     .requestMatchers(HttpMethod.OPTIONS).permitAll()
                     .anyRequest().authenticated())
