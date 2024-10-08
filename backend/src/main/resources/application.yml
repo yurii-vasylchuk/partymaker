@@ -1,0 +1,20 @@
+spring.application.name: bursdag
+server:
+  port: 8080
+
+
+spring:
+  datasource:
+    username: bursdag
+    password: secret
+    url: jdbc:postgresql://localhost:5432/bursdag
+  jpa:
+    hibernate:
+      ddl-auto: validate
+
+bursdag:
+  jwt:
+    secretKey: VO87WsCvKviIzkIZzqJK+myPdnLn7DXGuyKHSpJeGNI=
+logging:
+  level:
+    org.springframework.security: WARN

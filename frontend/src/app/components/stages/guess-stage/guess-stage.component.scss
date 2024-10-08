@@ -1,0 +1,71 @@
+@use "variables" as v;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  align-items: stretch;
+  width: 100%;
+  gap: 10px;
+
+  > h2, p {
+    text-align: center;
+  }
+}
+
+.guesses-container {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  grid-auto-rows: auto;
+  row-gap: 20px;
+  align-items: center;
+
+  .profile {
+    width: 100%;
+    grid-column-start: 1;
+    grid-column-end: 2;
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+
+    .nickname {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      > p {
+        margin: 5px;
+      }
+
+      > img {
+        --size: 1rem;
+        --border-size: 1px;
+
+        margin: 0 5px;
+        background-color: #FFFFFF;
+        border-radius: 50%;
+
+        border: var(--border-size) solid v.$main;
+        width: var(--size);
+        height: var(--size);
+      }
+    }
+
+    .traits {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+
+      > span {
+        font-size: .8rem;
+        margin: 0 5px;
+      }
+    }
+  }
+
+  .username {
+    grid-column-start: 2;
+    grid-column-end: 3;
+  }
+}

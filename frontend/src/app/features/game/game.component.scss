@@ -1,0 +1,14 @@
+@use "variables" as v;
+@use "mixins" as m;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  gap: 5px;
+  align-items: center;
+  text-align: center;
+
+  box-sizing: border-box;
+  width: 100%;
+}

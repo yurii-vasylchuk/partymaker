@@ -1,0 +1,73 @@
+<brstg-stage-heading [description]="stage().description"
+                     [name]="stage().name">
+</brstg-stage-heading>
+
+@if (currentMatch().competitors.includes(principal().id)) {
+  <p>Ваша черга показати класс! Іди і переможи!</p>
+  @let task = playerTask() ;
+
+  @if (task != null) {
+    @switch (task.type) {
+      @case ('IMAGE') {
+        <img [src]="environment.apiUrl + task['path']">
+      }
+      @case ('TEXT') {
+        <p>{{ task['text'] }}</p>
+      }
+      @default {
+        <h2>UNKNOWN TASK TYPE: {{ task }}</h2>
+      }
+    }
+  } @else {
+    <h1>Shouldn't happen</h1>
+  }
+
+} @else {
+
+  <h2>Завдання:</h2>
+
+  @if (currentMatch().type === 'SAME_FOR_ALL') {
+    @let task = currentMatch().competitorsTasks[0] ;
+    <brstg-players-list title="Змагаються"
+                        [players]="playersByIds(currentMatch().competitors)">
+    </brstg-players-list>
+
+    @switch (task.type) {
+      @case ('IMAGE') {
+        <img [src]="environment.apiUrl + task['path']">
+      }
+      @case ('TEXT') {
+        <p>{{ task['text'] }}</p>
+      }
+      @default {
+        <h1>UNKNOWN TASK TYPE: {{ task }}</h1>
+      }
+    }
+  } @else if (currentMatch().type === 'DISTINCT_2' || currentMatch().type === 'DISTINCT_3') {
+    <div class="competitors-tasks-container">
+      @for (task of currentMatch().competitorsTasks; track $index) {
+        @let competitor = playerById(currentMatch().competitors[$index]) ;
+        <div class="competitor-task">
+          @switch (task.type) {
+            @case ('IMAGE') {
+              <img [src]="environment.apiUrl + task['path']"/>
+            }
+            @case ('TEXT') {
+              <p>{{ task['text'] }}</p>
+            }
+            @default {
+              <h1>UNKNOWN TASK TYPE: {{ task }}</h1>
+            }
+          }
+          <div class="name">
+            <p>{{ competitor?.username }}</p>
+            <p>aka</p>
+            <p>{{ competitor?.nickname }}</p>
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <h2>UNKNOWN MATCH TYPE: {{ currentMatch().type }}</h2>
+  }
+}

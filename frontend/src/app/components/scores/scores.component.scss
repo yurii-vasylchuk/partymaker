@@ -1,0 +1,39 @@
+@use "variables" as v;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+h1 {
+  text-align: center;
+}
+
+.scores {
+  padding: 0;
+  margin: 0;
+
+  li {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: .6rem;
+  }
+
+  img {
+    --size: 1rem;
+    --border-size: 1px;
+
+    margin: 0 5px;
+    background-color: #FFFFFF;
+    border-radius: 50%;
+
+    border: var(--border-size) solid v.$main;
+    width: var(--size);
+    height: var(--size);
+  }
+}

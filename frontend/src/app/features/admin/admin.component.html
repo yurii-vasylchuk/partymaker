@@ -1,0 +1,113 @@
+@defer (when game() != undefined) {
+  @switch (game()?.status) {
+    @case ('NEW') {
+      <p>Гравці: {{ game()!.players.length }}</p>
+
+      <ol>
+        @for (player of game()!.players; track player.userId) {
+          <li>{{ player.username }}</li>
+        }
+      </ol>
+      <button (click)="handleStartGameClicked()">Розпочати гру!</button>
+    }
+    @case ('ON_STAGE') {
+      <h3>Етап: {{ game()?.currentStage?.name }}</h3>
+
+      @if (game()?.currentStage?.type === 'CONTEST') {
+        @if (contestCtx()!.state === 'TASK') {
+          <p>Задача {{ contestCtx()!.currentTaskIdx + 1 }} з {{ contestCtx()!.tasksDistribution.length }}</p>
+          <brstg-players-list [players]="contestCurrentPlayers()"
+                              [title]="'Виступають'">
+          </brstg-players-list>
+        } @else if (contestCtx()!.state === 'RANKING') {
+          <p>Голосування</p>
+        }
+
+        @if (contestCtx()!.currentTaskIdx < (contestCtx()!.tasksDistribution.length - 1)) {
+          <button (click)="handleNextTaskClicked()">
+            Наступне завдання
+          </button>
+        } @else if (contestCtx()!.currentTaskIdx === (contestCtx()!.tasksDistribution.length - 1)) {
+          <button (click)="handleNextTaskClicked()">
+            Перейти до голосування
+          </button>
+        }
+
+        <button (click)="handlePrevTaskClicked()"
+                [disabled]="contestCtx()!.currentTaskIdx === 0">
+          Попереднє завдання
+        </button>
+      }
+
+      @if (game()?.currentStage?.type === 'TOURNAMENT') {
+        @let match = tournamentCurrentMatch() ;
+        <p>{{ match?.type }}</p>
+        <div class="competitors-tasks-container">
+          @if (match != null) {
+            @for (competitorId of match.competitors; track competitorId) {
+              @let competitor = playerById(competitorId) ;
+              @let task = match.type == 'SAME_FOR_ALL' ? match.competitorsTasks[0] : match.competitorsTasks[$index] ;
+
+              <div class="competitor-task">
+                @switch (task.type) {
+                  @case ('IMAGE') {
+                    <img [src]="environment.apiUrl + task['path']"/>
+                  }
+                  @case ('TEXT') {
+                    <p>{{ task['text'] }}</p>
+                  }
+                  @default {
+                    <h1>UNKNOWN TASK TYPE: {{ task }}</h1>
+                  }
+                }
+                <div class="name">
+                  <p>{{ competitor?.username }}</p>
+                  <p>aka</p>
+                  <p>{{ competitor?.nickname }}</p>
+                </div>
+              </div>
+            }
+          }
+        </div>
+
+        <select [formControl]="tournamentWinnerSelectorFc">
+          <option [value]="null"
+                  disabled
+                  style="display: none;">
+          </option>
+          @for (competitorId of tournamentCurrentMatch()!.competitors; track competitorId) {
+            @let competitor = playerById(competitorId) ;
+            <option [value]="competitorId">{{ competitor?.username }} aka {{ competitor?.nickname }}</option>
+          }
+        </select>
+
+        <button (click)="handleNextMatchClick()">Наступний матч</button>
+      }
+
+      @if (game()?.currentStage?.readiness) {
+        <p>Готовність: {{ game()?.currentStage?.readiness?.ready }}/{{ game()?.currentStage?.readiness?.total }}</p>
+      }
+      @if (game()?.currentStage?.readiness?.ready === game()?.currentStage?.readiness?.total) {
+        <button (click)="handleCompleteStageClicked()">Завершити етап</button>
+      }
+    }
+    @case ('STAGE_COMPLETED') {
+      <brstg-scores [gameScores]="game()!.scores"
+                    [players]="game()!.players"
+                    [stageName]="game()!.currentStage.name"
+                    [stageScores]="game()!.lastStageScores">
+      </brstg-scores>
+
+      <button (click)="handleStartGameClicked()">Розпочати наступний етап</button>
+    }
+    @case ('FINALIZED') {
+      <h2>Гру завершено</h2>
+
+      <brstg-scores [gameScores]="game()!.scores"
+                    [players]="game()!.players">
+      </brstg-scores>
+    }
+  }
+} @placeholder {
+  <h1>Loading...</h1>
+}

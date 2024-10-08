@@ -1,0 +1,36 @@
+<brstg-stage-heading [description]="stage().description"
+                     [name]="stage().name">
+</brstg-stage-heading>
+
+<div class="guesses-container">
+  @for (option of displayOptions(); track option.profile.userId) {
+    <div class="profile">
+      <div class="nickname">
+        <img [src]="environment.apiUrl + option.profile.chosenAvatar"/>
+        <p>{{ option.profile.nickname }}</p>
+      </div>
+      <div class="traits">
+        @for (trait of option.profile.chosenTraits | keyvalue; track trait.key) {
+          <span>{{ trait.key }}: {{ trait.value }}</span>
+        }
+      </div>
+    </div>
+    <div class="username">
+      <select [formControl]="option.control"
+              [compareWith]="displayOptionComparator">
+        <!--        <option [ngValue]="({profileId: option.profile.userId, userId: null})"-->
+        <!--                disabled-->
+        <!--                style="display: none"></option>-->
+        @for (p_username of ctx().players; track p_username.userId) {
+          <option [ngValue]="{profileId: option.profile.userId, userId: p_username.userId}">{{ p_username.username }}
+          </option>
+        }
+      </select>
+    </div>
+  }
+</div>
+
+<button (click)="handleReadyClick()"
+        [disabled]="isPlayerReady()">
+  Закінчив
+</button>

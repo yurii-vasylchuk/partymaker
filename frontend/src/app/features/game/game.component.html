@@ -1,0 +1,65 @@
+@defer (when game() != undefined) {
+
+  @switch (game()?.status) {
+    @case ('NEW') {
+      <h1>Вітаємо у:<br/>{{ game()!.name }}</h1>
+      @if (game()!.players.length == 0) {
+        <p>Доєднуйся, будь першим!</p>
+      } @else {
+        <p>Гравців доєдналось: {{ game()!.players.length }}</p>
+        @if (!isJoined()) {
+          <p>Чекаємо тільки на тебе!</p>
+        }
+      }
+
+      @if (!isJoined()) {
+        <button (click)="join()">Доєднатися!</button>
+      }
+    }
+    @case ('ON_STAGE') {
+      @switch (game()!.currentStage.type) {
+        @case ('REGISTRATION') {
+          <brstg-registration-stage [stage]="game()!.currentStage"
+                                    [player]="principal()!"
+                                    (act)="handleStageAct($event)">
+          </brstg-registration-stage>
+        }
+        @case ('GUESS') {
+          <brstg-guess-stage [stage]="game()!.currentStage"
+                             [principal]="principal()!"
+                             (act)="handleStageAct($event)">
+          </brstg-guess-stage>
+        }
+        @case ('CONTEST') {
+          <brstg-contest-stage [stage]="game()!.currentStage"
+                               [principal]="principal()!"
+                               (act)="handleStageAct($event)">
+          </brstg-contest-stage>
+        }
+        @case ('TOURNAMENT') {
+          <brstg-tournament-stage [stage]="game()!.currentStage"
+                                  [principal]="principal()!"
+                                  (act)="handleStageAct($event)">
+          </brstg-tournament-stage>
+        }
+        @default {
+          <h1>Unknown stage type: {{ game()!.currentStage.type }}</h1>
+        }
+      }
+    }
+    @case ('STAGE_COMPLETED') {
+      <brstg-scores [players]="game()!.players"
+                    [gameScores]="game()!.scores"
+                    [stageScores]="game()!.lastStageScores"
+                    [stageName]="game()!.currentStage.name">
+      </brstg-scores>
+    }
+    @case ('FINALIZED') {
+      <brstg-scores [players]="game()!.players"
+                    [gameScores]="game()!.scores">
+      </brstg-scores>
+    }
+  }
+} @placeholder (minimum 1s) {
+  <h1>Гра завантажується</h1>
+}

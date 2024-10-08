@@ -1,0 +1,69 @@
+package org.yvasylchuk.bursdag.config;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.yvasylchuk.bursdag.common.JwtTokenService;
+
+import java.util.List;
+
+@Configuration
+@EnableMethodSecurity
+@RequiredArgsConstructor
+public class WebSecurityConf {
+    private final JwtAuthenticationEntryPoint authenticationEntryPoint;
+
+    @Bean
+    public SecurityFilterChain authenticationFilterChain(HttpSecurity http,
+                                                         JwtTokenService jwtTokenService,
+                                                         UserDetailsService userDetailsService,
+                                                         CorsConfigurationSource corsConfigurationSource) throws Exception {
+        JwtFilter jwtFilter = new JwtFilter(jwtTokenService,
+                                            userDetailsService);
+
+        http.sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .csrf(AbstractHttpConfigurer::disable)
+            .cors(configurer -> configurer.configurationSource(corsConfigurationSource))
+            .formLogin(AbstractHttpConfigurer::disable)
+            .userDetailsService(userDetailsService)
+            .authorizeHttpRequests(customizer -> customizer
+                    .requestMatchers("/api/common/access-token").permitAll()
+                    .requestMatchers("/bursdag-static/**").permitAll()
+                    .requestMatchers("/ws", "/ws/**").permitAll()
+                    .requestMatchers("/error").permitAll()
+                    .requestMatchers(HttpMethod.OPTIONS).permitAll()
+                    .anyRequest().authenticated())
+            .exceptionHandling(e -> e.authenticationEntryPoint(authenticationEntryPoint))
+            .addFilterBefore(jwtFilter, BasicAuthenticationFilter.class);
+
+        return http.build();
+    }
+
+    @Bean
+    @Primary
+    public CorsConfigurationSource configurationSource() {
+        CorsConfiguration corsConfig = new CorsConfiguration();
+
+        corsConfig.applyPermitDefaultValues();
+        corsConfig.setAllowCredentials(true);
+        corsConfig.setAllowedOrigins(List.of("http://localhost:4200", "https://mvasylchuk-bursdag.loca.lt"));
+        corsConfig.setAllowedMethods(List.of("GET", "HEAD", "POST", "PUT", "DELETE", "OPTIONS"));
+
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfig);
+        return source;
+    }
+}

@@ -1,0 +1,6 @@
+<p>{{ title() }}:</p>
+<ol>
+  @for (player of players(); track player.userId) {
+    <li>{{ fullName(player) }}</li>
+  }
+</ol>

@@ -1,0 +1,21 @@
+@use "variables" as v;
+@use "mixins" as m;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  height: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 10px;
+}
+
+h1 {
+  color: #FFFFFF;
+  font-size: 3rem;
+  text-align: center;
+  @include m.text-stroke(2px);
+}

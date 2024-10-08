@@ -1,0 +1,18 @@
+@if (stageName()) {
+  <h1>Результати етапу {{ stageName() }}</h1>
+} @else {
+  <h1>Результати гри</h1>
+}
+
+<ol class="scores">
+  @for (score of scores(); track score.player.userId) {
+    <li>
+      {{ $index + 1 }}.
+      <img [src]="environment.apiUrl + score.player.chosenAvatar"> {{ score.player.username }}
+      aka {{ score.player.nickname }}: {{ score.gameScore }}
+      @if (score.stageScore) {
+        (+{{ score.stageScore }})
+      }
+    </li>
+  }
+</ol>

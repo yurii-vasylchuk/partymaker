@@ -1,0 +1,38 @@
+:host {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+}
+
+.ranking-container {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-auto-rows: auto;
+  gap: 5px;
+
+
+  > .ranking-title {
+    grid-column: 1 / 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  > .ranking-select {
+    grid-column: 2 / 3;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+  }
+}

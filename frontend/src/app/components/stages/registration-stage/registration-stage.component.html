@@ -1,0 +1,50 @@
+<brstg-stage-heading [description]="stage().description"
+                     [name]="stage().name">
+</brstg-stage-heading>
+
+<h3>Ваше поганялово мілорд:</h3>
+<div class="nickname-container">
+  <input [disabled]="isPlayerReady()"
+         [formControl]="nicknameFc"
+         id="nickname-inp">
+</div>
+
+<h3>Ваш автопортрет:</h3>
+<div class="avatars-container">
+  @for (avatar of ctx().availableAvatars; track avatar) {
+    <button class="avatar"
+            [disabled]="isPlayerReady()"
+            (click)="handleAvatarClick(avatar)">
+      <img [src]="environment.apiUrl + avatar">
+
+      @if (avatarsAvailabilityMap().get(avatar) == 'YOU') {
+        <div class="chosen">V</div>
+      }
+      @if (avatarsAvailabilityMap().get(avatar) == 'ANOTHER') {
+        <div class="unavailable">X</div>
+      }
+      @if (isPlayerReady()) {
+        <div class="disabled-overlay"></div>
+      }
+    </button>
+  }
+</div>
+
+<h3>Теж щось тут обирай</h3>
+<div class="traits-container">
+  @for (group of traitsDisplay(); track group.category) {
+    <select [formControl]="group.fc"
+            [compareWith]="traitsComparator">
+      <option style="display: none"
+              disabled></option>
+      @for (trait of group.traits; track trait) {
+        <option [ngValue]="trait">{{ trait.trait }}</option>
+      }
+    </select>
+  }
+</div>
+
+<button (click)="handleReadyClick()"
+        [disabled]="isPlayerReady()">
+  Я готовий
+</button>

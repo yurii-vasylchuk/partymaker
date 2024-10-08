@@ -1,0 +1,43 @@
+<brstg-stage-heading [description]="stage().description"
+                     [name]="stage().name">
+</brstg-stage-heading>
+
+@switch (ctx().state) {
+  @case ('TASK') {
+    <h2>{{ currentTask().title }}</h2>
+    <brstg-players-list [players]="currentTaskPlayers()">
+    </brstg-players-list>
+    @if (!ctx().isTaskDetailsPrivate || currentTask().usersIds.includes(principal().id)) {
+      <p>{{ currentTask().description }}</p>
+    }
+  }
+  @case ('RANKING') {
+    @if (loaded()) {
+      <form [formGroup]="form">
+        <div class="ranking-container"
+             formArrayName="places">
+          @for (place of range(ctx().winningPlaces); track place) {
+            <div class="ranking-title">
+              <p>{{ place + 1 }} місце:</p>
+            </div>
+            <div class="ranking-select">
+              <select [formControlName]="$index">
+                <option [value]="null"
+                        disabled
+                        style="display: none;"></option>
+                @for (player of ctx().players; track player.userId) {
+                  <option [value]="player.userId">{{ player.username }}</option>
+                }
+              </select>
+            </div>
+          }
+        </div>
+      </form>
+
+      <button (click)="handleReadyClicked()"
+              [disabled]="isPlayerReady()">
+        Підтверджую
+      </button>
+    }
+  }
+}

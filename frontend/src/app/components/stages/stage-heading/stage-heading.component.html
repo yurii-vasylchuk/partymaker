@@ -1,0 +1,16 @@
+<h1>{{ name() }}</h1>
+
+@if (description()) {
+  <div class="description-container">
+    <input type="checkbox"
+           class="toggle"
+           id="description-toggle"
+           checked>
+    <label for="description-toggle"
+           class="label-toggle">Деталі завдання</label>
+
+    <div class="collapsible-content">
+      <p class="content-inner">{{ description() }}</p>
+    </div>
+  </div>
+}

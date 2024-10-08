@@ -1,0 +1,15 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  > p {
+    width: 100%;
+    text-align: center;
+    margin: 5px;
+  }
+
+  > ol {
+    margin: 5px;
+  }
+}

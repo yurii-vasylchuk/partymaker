@@ -1,0 +1,36 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 5px;
+  align-items: stretch;
+}
+
+.competitors-tasks-container {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 5px;
+}
+
+.competitor-task {
+  display: flex;
+  flex-direction: row;
+
+  > img {
+    width: 50%;
+  }
+
+  > .name {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    justify-content: center;
+
+    > p {
+      margin: 5px;
+    }
+  }
+}
