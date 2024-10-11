@@ -87,6 +87,15 @@
       @if (game()?.currentStage?.readiness) {
         <p>Готовність: {{ game()?.currentStage?.readiness?.ready }}/{{ game()?.currentStage?.readiness?.total }}</p>
       }
+      @if (game()?.currentStage?.ctx?.['playersReadiness']) {
+        @let playersReadiness = game()!.currentStage!.ctx!['playersReadiness'];
+        @let players = game()!.players;
+        <ol>
+        @for (player of players; track player.userId) {
+          <li>{{player.username}} aka {{player.nickname}} - {{playersReadiness[$index] ? 'готов' : 'не готов'}}</li>
+        }
+        </ol>
+      }
       @if (game()?.currentStage?.readiness?.ready === game()?.currentStage?.readiness?.total) {
         <button (click)="handleCompleteStageClicked()">Завершити етап</button>
       }

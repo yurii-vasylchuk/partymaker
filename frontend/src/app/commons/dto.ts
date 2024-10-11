@@ -58,7 +58,7 @@ export type StageDescriptor = {
     total: number;
     ready: number;
   }
-  ctx: unknown;
+  ctx: any;
 }
 
 export type Principal = {
