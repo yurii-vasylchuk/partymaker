@@ -191,8 +191,7 @@ public class ContestStage extends Stage<ContestStage.Context> {
 
             ctx.playersReadiness = players.stream().collect(Collectors.toMap(
                     Player::getUserId,
-                    ignored -> false
-                                                                            ));
+                    ignored -> false));
 
             ctx.currentTaskIdx = 0;
             ctx.state = ContestState.TASK;
@@ -248,7 +247,10 @@ public class ContestStage extends Stage<ContestStage.Context> {
 
                 taskUsersIds.add(usersIds.get(userIdx));
             }
-            ctx.tasksDistribution.add(new UserTaskLink(taskUsersIds, tasksIndexes.get(i)));
+
+            if (!taskUsersIds.isEmpty()) {
+                ctx.tasksDistribution.add(new UserTaskLink(taskUsersIds, tasksIndexes.get(i)));
+            }
         }
     }
 
