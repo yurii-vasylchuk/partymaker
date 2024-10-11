@@ -51,7 +51,8 @@
       <brstg-scores [players]="game()!.players"
                     [gameScores]="game()!.scores"
                     [stageScores]="game()!.lastStageScores"
-                    [stageName]="game()!.currentStage.name">
+                    [stageName]="game()!.currentStage.name"
+                    [showNames]="game()!.currentStage.type != 'REGISTRATION'">
       </brstg-scores>
     }
     @case ('FINALIZED') {

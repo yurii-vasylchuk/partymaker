@@ -8,8 +8,12 @@
   @for (score of scores(); track score.player.userId) {
     <li>
       {{ $index + 1 }}.
-      <img [src]="environment.apiUrl + score.player.chosenAvatar"> {{ score.player.username }}
-      aka {{ score.player.nickname }}: {{ score.gameScore }}
+      <img [src]="environment.apiUrl + score.player.chosenAvatar">
+      @if (showNames()) {
+        {{ score.player.username }}
+        aka
+      }
+      {{ score.player.nickname }}: {{ score.gameScore }}
       @if (score.stageScore) {
         (+{{ score.stageScore }})
       }

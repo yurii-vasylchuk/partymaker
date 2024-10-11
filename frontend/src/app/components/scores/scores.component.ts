@@ -19,6 +19,7 @@ type ScoresRecord = {
 })
 export class ScoresComponent {
   stageName = input<string>();
+  showNames = input<boolean>(true);
   players = input.required<GamePlayer[]>();
   gameScores = input.required<GameState['scores']>();
   stageScores = input<GameState['lastStageScores']>();
