@@ -92,7 +92,7 @@
         @let players = game()!.players;
         <ol>
         @for (player of players; track player.userId) {
-          <li>{{player.username}} aka {{player.nickname}} - {{playersReadiness[$index] ? 'готов' : 'не готов'}}</li>
+          <li>{{player.username}} aka {{player.nickname}} - {{playersReadiness[player.userId] ? 'готов' : 'не готов'}}</li>
         }
         </ol>
       }
