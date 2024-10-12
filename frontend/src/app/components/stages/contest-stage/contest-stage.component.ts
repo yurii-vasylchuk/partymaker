@@ -1,4 +1,14 @@
-import {ChangeDetectionStrategy, Component, computed, effect, inject, input, output, signal} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  inject,
+  input,
+  OnInit,
+  output,
+  signal
+} from '@angular/core';
 import {GamePlayer, Principal, StageDescriptor} from '../../../commons/dto';
 import {ContestActions, ContestStageContext, ContestTask, ContestUserTaskLink, PlacementsSetAction} from './dto';
 import {FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
@@ -23,7 +33,7 @@ type PlacesForm = FormGroup<{
   styleUrl: './contest-stage.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ContestStageComponent {
+export class ContestStageComponent implements OnInit {
   stage = input.required<StageDescriptor>();
   principal = input.required<Principal>();
   act = output<ContestActions>();
@@ -86,6 +96,12 @@ export class ContestStageComponent {
     });
 
     this.form.valueChanges.subscribe(form => this.onFormEdited(form.places));
+  }
+
+  ngOnInit() {
+    this.form.setValue({
+      places: []
+    }, {emitEvent: false});
   }
 
   protected range(to: number): number[] {

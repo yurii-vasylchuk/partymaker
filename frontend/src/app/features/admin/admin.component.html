@@ -69,19 +69,20 @@
             }
           }
         </div>
+        @if (game()?.currentStage?.readiness && (game()?.currentStage?.readiness?.ready !== game()?.currentStage?.readiness?.total)) {
+          <select [formControl]="tournamentWinnerSelectorFc">
+            <option [value]="null"
+                    disabled
+                    style="display: none;">
+            </option>
+            @for (competitorId of tournamentCurrentMatch()!.competitors; track competitorId) {
+              @let competitor = playerById(competitorId) ;
+              <option [value]="competitorId">{{ competitor?.username }} aka {{ competitor?.nickname }}</option>
+            }
+          </select>
 
-        <select [formControl]="tournamentWinnerSelectorFc">
-          <option [value]="null"
-                  disabled
-                  style="display: none;">
-          </option>
-          @for (competitorId of tournamentCurrentMatch()!.competitors; track competitorId) {
-            @let competitor = playerById(competitorId) ;
-            <option [value]="competitorId">{{ competitor?.username }} aka {{ competitor?.nickname }}</option>
-          }
-        </select>
-
-        <button (click)="handleNextMatchClick()">Наступний матч</button>
+          <button (click)="handleNextMatchClick()">Наступний матч</button>
+        }
       }
 
       @if (game()?.currentStage?.readiness) {
