@@ -1,6 +1,7 @@
 package org.yvasylchuk.bursdag.game;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,6 +13,7 @@ import org.yvasylchuk.bursdag.common.BursdagUserDetailsService.BursdagUserDetail
 import org.yvasylchuk.bursdag.common.dto.AsyncAction;
 import org.yvasylchuk.bursdag.common.dto.BursdagPrincipal;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/game")
 @MessageMapping("/game")
@@ -28,6 +30,9 @@ public class GameController {
     @MessageMapping("/admin-act")
     public void adminAct(BursdagPrincipal player,
                          @Payload AsyncAction payload) {
+        if (!player.getRoles().contains("ADMIN")) {
+            log.warn("Unauthorized access: {} sent message to /admin-act", player);
+        }
         gameService.adminAct(player, payload);
     }
 
