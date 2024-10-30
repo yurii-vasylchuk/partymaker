@@ -4,13 +4,15 @@ server:
 
 
 spring:
-  datasource:
-    username: bursdag
-    password: secret
-    url: jdbc:postgresql://localhost:5432/bursdag
-  jpa:
-    hibernate:
-      ddl-auto: validate
+  data:
+    mongodb:
+      uuid-representation: standard
+      authentication-database: admin
+      username: partymaker
+      password: secret
+      database: partymaker
+      host: localhost
+      port: 27017
 
 bursdag:
   jwt:
