@@ -21,6 +21,7 @@ public class WebSocketConf implements WebSocketMessageBrokerConfigurer {
     private final AuthenticatedUserResolver authenticatedUserResolver;
     private final AuthorizationInterceptor authorizationInterceptor;
     private final PreemptiveDataSendingInterceptor preemptiveDataSendingInterceptor;
+    private final ExceptionHandlingInterceptor exceptionHandlingInterceptor;
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
@@ -41,9 +42,8 @@ public class WebSocketConf implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
-        registration.interceptors(
-                authorizationInterceptor,
-                preemptiveDataSendingInterceptor
-                                 );
+        registration.interceptors(authorizationInterceptor,
+                                  preemptiveDataSendingInterceptor,
+                                  exceptionHandlingInterceptor);
     }
 }

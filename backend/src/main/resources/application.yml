@@ -6,6 +6,7 @@ server:
 spring:
   data:
     mongodb:
+      auto-index-creation: true
       uuid-representation: standard
       authentication-database: admin
       username: partymaker
@@ -14,9 +15,21 @@ spring:
       host: localhost
       port: 27017
 
-bursdag:
+resilience4j:
+  retry:
+    instances:
+      party-act:
+        base-config: optimistic-log
+    configs:
+      optimistic-log:
+        max-attempts: 3
+        wait-duration: 100ms
+        retry-exceptions:
+          - org.springframework.dao.OptimisticLockingFailureException
+
+partymaker:
   jwt:
     secretKey: VO87WsCvKviIzkIZzqJK+myPdnLn7DXGuyKHSpJeGNI=
 logging:
   level:
-    org.springframework.security: WARN
+    root: info

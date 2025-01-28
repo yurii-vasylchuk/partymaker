@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.yvasylchuk.partymaker.common.PartymakerJwtAuthentication;
 import org.yvasylchuk.partymaker.common.dto.PartymakerPrincipal;
 import org.yvasylchuk.partymaker.user.JwtTokenService;
 

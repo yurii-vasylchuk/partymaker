@@ -7,6 +7,7 @@ import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.yvasylchuk.partymaker.common.dto.PartymakerPrincipal;
@@ -15,6 +16,7 @@ import javax.crypto.SecretKey;
 import java.util.Arrays;
 import java.util.List;
 
+@Slf4j
 @Service
 public class JwtTokenService {
     private static final String ROLES_CLAIM = "roles";
@@ -22,7 +24,7 @@ public class JwtTokenService {
 
     private final SecretKey secretKey;
 
-    public JwtTokenService(@Value("${bursdag.jwt.secretKey}") String secretKeyStr) {
+    public JwtTokenService(@Value("${partymaker.jwt.secretKey}") String secretKeyStr) {
         this.secretKey = Keys.hmacShaKeyFor((Decoders.BASE64.decode(secretKeyStr)));
     }
 
@@ -42,6 +44,7 @@ public class JwtTokenService {
     }
 
     public String generateJwt(PartymakerPrincipal user) {
+        log.trace("Generating JWT for {}", user.username());
         return Jwts.builder()
                    .signWith(secretKey)
                    .subject(user.id())

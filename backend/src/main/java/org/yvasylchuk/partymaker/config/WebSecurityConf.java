@@ -9,6 +9,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -34,9 +36,9 @@ public class WebSecurityConf {
             .csrf(AbstractHttpConfigurer::disable)
             .cors(configurer -> configurer.configurationSource(corsConfigurationSource))
             .formLogin(AbstractHttpConfigurer::disable)
-//            .userDetailsService(userDetailsService)
             .authorizeHttpRequests(customizer -> customizer
-                    .requestMatchers("/api/common/access-token").permitAll()
+                    .requestMatchers("/api/user/access-token").permitAll()
+                    .requestMatchers("/api/user").permitAll()
                     .requestMatchers("/bursdag-static/**").permitAll()
                     .requestMatchers("/ws", "/ws/**").permitAll()
                     .requestMatchers("/wss", "/wss/**").permitAll()
@@ -47,6 +49,11 @@ public class WebSecurityConf {
             .addFilterBefore(jwtFilter, BasicAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean

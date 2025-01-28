@@ -10,7 +10,7 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.stereotype.Component;
 import org.yvasylchuk.partymaker.common.dto.PartymakerPrincipal;
-import org.yvasylchuk.partymaker.common.dto.events.AsyncEvent;
+import org.yvasylchuk.partymaker.party.dto.process.AsyncEvent;
 import org.yvasylchuk.partymaker.user.JwtTokenService;
 
 import java.util.List;

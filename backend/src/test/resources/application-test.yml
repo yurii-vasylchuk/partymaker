@@ -1,0 +1,8 @@
+partymaker:
+  jwt:
+    secretKey: VO87WsCvKviIzkIZzqJK+myPdnLn7DXGuyKHSpJeGNI=
+logging:
+  level:
+    root: info
+    org.yvasylchuk.partymaker.party.PartyController: trace
+
